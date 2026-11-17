@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Check</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>body{font:18px/1.6 system-ui,sans-serif;padding:20px;max-width:640px;margin:auto}div{padding:8px 12px;margin:6px 0;border-radius:8px;background:#eee;word-break:break-word}.ok{background:#dcfce7}.no{background:#fee2e2}</style></head>
+<body><h2>All-in English – connection check</h2>
+<div class="ok">1. This HTML page opens ✓</div>
+<div id="js" class="no">2. JavaScript is NOT running ✗</div>
+<div id="ls">3. Browser storage: checking…</div>
+<div id="sb">4. Supabase database: checking…</div>
+<div id="fn">5. Leaderboard function: checking…</div>
+<script>
+var URL_='https://uqzvhkrldixzsvmyvbfo.supabase.co',KEY='sb_publishable_7GqfDp5rEJRu2qlwuS0q5w_F-d5Dpv0';
+function set(id,ok,t){var e=document.getElementById(id);e.className=ok?'ok':'no';e.textContent=t}
+set('js',true,'2. JavaScript is running ✓');
+try{localStorage.setItem('x','1');localStorage.removeItem('x');set('ls',true,'3. Browser storage works ✓')}catch(e){set('ls',false,'3. Browser storage blocked ✗ ('+e.message+')')}
+fetch(URL_+'/rest/v1/rpc/leaderboard',{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:'{}'}).then(function(r){
+ set('sb',true,'4. Reached Supabase ✓ (status '+r.status+')');
+ return r.text().then(function(t){
+  if(r.ok)set('fn',true,'5. Leaderboard function works ✓ '+t.slice(0,120));
+  else set('fn',false,'5. Problem ✗ '+t.slice(0,300));
+ })
+}).catch(function(e){set('sb',false,'4. Cannot reach Supabase ✗ ('+e.message+')');set('fn',false,'5. Not tested')});
+</script></body></html>
